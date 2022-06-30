@@ -1,0 +1,70 @@
+name: Build and publish the laravel 
+
+on:
+  create:
+    tags:
+      - 'v*.*.*'
+env:
+  PROJECT_ID: ${{ secrets.GKE_PROJECT }}
+  REGION: europe-west3
+  GKE_KEY_TPE:  _json_key 
+  GKE_ARTIFACTS_REPO: base-images
+  GKE_DOCKER_ENDPOINT: docker.pkg.dev
+  IMAGE_NAME: laravel
+
+jobs:
+  setup-build-publish-deploy:
+    name: build and push base image 
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: true
+      matrix:
+        DockerFiles: [ 8.0-nginx.Dockerfile ,8.0-swoole.Dockerfile]
+        name:  [nginx,swoole]
+        exclude:
+        - DockerFiles: 8.0-nginx.Dockerfile
+          name: swoole
+        - DockerFiles: 8.0-swoole.Dockerfile
+          name: nginx
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+
+    - name: Set up Docker Buildx
+      id: buildx
+      uses: docker/setup-buildx-action@v1
+
+    - uses: google-github-actions/auth@v0.7.3
+      with:
+        credentials_json: ${{ secrets.GKE_ARTIFACTS_SA__KEY }}
+        create_credentials_file: True
+        cleanup_credentials: True
+
+    - name: 'Set up Cloud SDK'
+      uses: 'google-github-actions/setup-gcloud@v0'    
+      
+    - run: |-
+         gcloud auth configure-docker --quiet
+         gcloud auth configure-docker ${{ env.REGION }}-${{ env.GKE_DOCKER_ENDPOINT }} --quiet
+      name: auth docker to registry 
+
+    - name: 'Set up Cloud SDK and login to acr using helm'
+      uses: 'google-github-actions/setup-gcloud@v0'    
+    - run: |
+        cat ${{ github.workspace }}/gha-creds-*.json  | docker login -u ${{ env.GKE_KEY_TPE }}  --password-stdin https://${{ env.REGION }}-${{ env.GKE_DOCKER_ENDPOINT}}
+
+    - name: Branch name
+      id: extract_branch_name
+      run: |
+        echo ::set-output name=SOURCE_NAME::${GITHUB_REF#refs/*/}
+        echo ::set-output name=SOURCE_BRANCH::${GITHUB_REF#refs/heads/}
+        echo ::set-output name=SOURCE_TAG::${GITHUB_REF#refs/tags/}
+
+    - name: Build image and push to Docker Hub and GitHub Container Registry
+      uses: docker/build-push-action@v2
+      with:
+        context: .
+        tags: | 
+              ${{ env.REGION }}-${{ env.GKE_DOCKER_ENDPOINT}}/${{ secrets.GKE_PROJECT }}/${{ env.GKE_ARTIFACTS_REPO }}/${{ env.IMAGE_NAME }}-${{ matrix.name }}:${{ steps.extract_branch_name.outputs.SOURCE_TAG }}
+        push:  true      
+        file: ${{ matrix.DockerFiles }}
