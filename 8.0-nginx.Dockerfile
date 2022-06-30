@@ -9,5 +9,7 @@ ENV php.opcache.fast_shutdown=0
 ENV FPM_PM_MAX_CHILDREN=20
 ENV FPM_MAX_REQUESTS=1000
 
+RUN apk --update --no-cache add less
+
 WORKDIR /app
 USER 1000
