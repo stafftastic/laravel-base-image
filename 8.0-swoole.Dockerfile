@@ -1,10 +1,11 @@
+FROM composer:2.2 AS composer
+
 FROM phpswoole/swoole:4.8.9-php8.0-alpine
 
 RUN apk --update add \
         wget \
         curl \
         build-base \
-        composer \
         nodejs \
         npm \
         libmcrypt-dev \
@@ -25,7 +26,8 @@ RUN apk --update add \
         libzip-dev \
         gettext-dev \
         libxslt-dev \
-        libgcrypt-dev
+        libgcrypt-dev \
+        less
 
 RUN pecl channel-update pecl.php.net && \
     pecl install mcrypt && \
@@ -50,7 +52,12 @@ RUN pecl channel-update pecl.php.net && \
     rm -rf /tmp/pear && \
     rm /var/cache/apk/*
 
+COPY --from=composer /usr/bin/composer /usr/bin/composer
+
+RUN adduser --shell /bin/sh --disabled-password --uid 1000 application
+RUN mkdir /app && chown 1000:1000 -R /app
+
 WORKDIR /app
 USER 1000
 
-EXPOSE 80
+EXPOSE 8000
