@@ -48,7 +48,7 @@ jobs:
          gcloud auth configure-docker ${{ env.REGION }}-${{ env.GKE_DOCKER_ENDPOINT }} --quiet
       name: auth docker to registry 
 
-    - name: 'Set up Cloud SDK and login to acr using helm'
+    - name: 'Set up Cloud SDK and login to acr using docker'
       uses: 'google-github-actions/setup-gcloud@v0'    
     - run: |
         cat ${{ github.workspace }}/gha-creds-*.json  | docker login -u ${{ env.GKE_KEY_TPE }}  --password-stdin https://${{ env.REGION }}-${{ env.GKE_DOCKER_ENDPOINT}}
@@ -60,7 +60,7 @@ jobs:
         echo ::set-output name=SOURCE_BRANCH::${GITHUB_REF#refs/heads/}
         echo ::set-output name=SOURCE_TAG::${GITHUB_REF#refs/tags/}
 
-    - name: Build image and push to Docker Hub and GitHub Container Registry
+    - name: Build image and push to Docker Hub and google artifacts
       uses: docker/build-push-action@v2
       with:
         context: .
