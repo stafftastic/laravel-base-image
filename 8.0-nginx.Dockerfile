@@ -9,7 +9,15 @@ ENV php.opcache.fast_shutdown=0
 ENV FPM_PM_MAX_CHILDREN=20
 ENV FPM_MAX_REQUESTS=1000
 
-RUN apk --update --no-cache add less
+RUN apk --update --no-cache add \
+    autoconf \
+    gcc \
+    g++ \
+    make \
+    librdkafka-dev \
+    less
+
+RUN pecl install rdkafka && docker-php-ext-enable rdkafka
 
 WORKDIR /app
 USER 1000
