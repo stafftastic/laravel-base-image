@@ -11,9 +11,9 @@ jobs:
       fail-fast: true
       matrix:
         images:
-          - name: nginx
+          - name: laravel-nginx
             file: 8.0-nginx.Dockerfile
-          - name: swoole
+          - name: laravel-swoole
             file: 8.0-swoole.Dockerfile
     steps:
     - name: Checkout
