@@ -10,6 +10,9 @@ ENV FPM_PM_MAX_CHILDREN=20
 ENV FPM_MAX_REQUESTS=1000
 
 RUN apk --update --no-cache add \
+    gcompat \
+    libstdc++ \
+    curl \
     autoconf \
     gcc \
     g++ \

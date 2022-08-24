@@ -3,6 +3,8 @@ FROM composer:2.2 AS composer
 FROM phpswoole/swoole:4.8.9-php8.0-alpine
 
 RUN apk --update add \
+        gcompat \
+        libstdc++ \
         wget \
         curl \
         build-base \
