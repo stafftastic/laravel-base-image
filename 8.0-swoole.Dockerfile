@@ -33,6 +33,7 @@ RUN apk --update add \
 
 RUN pecl channel-update pecl.php.net && \
     pecl install mcrypt && \
+    pecl install xdebug && \
     docker-php-ext-install \
         mysqli \
         mbstring \
@@ -51,6 +52,7 @@ RUN pecl channel-update pecl.php.net && \
         xsl && \
     docker-php-ext-configure gd --with-freetype=/usr/lib/ --with-jpeg=/usr/lib/ && \
     docker-php-ext-install gd && \
+    docker-php-ext-enable xdebug &&  \
     rm -rf /tmp/pear && \
     rm /var/cache/apk/*
 
