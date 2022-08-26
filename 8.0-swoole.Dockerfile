@@ -3,38 +3,40 @@ FROM composer:2.2 AS composer
 FROM phpswoole/swoole:4.8.9-php8.0-alpine
 
 RUN apk --update add \
-        gcompat \
-        libstdc++ \
-        git \
-        wget \
-        curl \
-        build-base \
-        nodejs \
-        npm \
-        libmcrypt-dev \
-        libxml2-dev \
-        pcre-dev \
-        zlib-dev \
-        autoconf \
-        oniguruma-dev \
-        openssl \
-        openssl-dev \
-        freetype-dev \
-        libjpeg-turbo-dev \
-        jpeg-dev \
-        libpng-dev \
-        imagemagick-dev \
-        imagemagick \
-        postgresql-dev \
-        libzip-dev \
-        gettext-dev \
-        libxslt-dev \
-        libgcrypt-dev \
-        less
+    gcompat \
+    libstdc++ \
+    git \
+    wget \
+    curl \
+    build-base \
+    nodejs \
+    npm \
+    libmcrypt-dev \
+    libxml2-dev \
+    pcre-dev \
+    zlib-dev \
+    autoconf \
+    oniguruma-dev \
+    openssl \
+    openssl-dev \
+    freetype-dev \
+    libjpeg-turbo-dev \
+    jpeg-dev \
+    libpng-dev \
+    imagemagick-dev \
+    imagemagick \
+    postgresql-dev \
+    libzip-dev \
+    gettext-dev \
+    libxslt-dev \
+    libgcrypt-dev \
+    librdkafka-dev \
+    less
 
 RUN pecl channel-update pecl.php.net && \
     pecl install mcrypt && \
     pecl install xdebug && \
+    pecl install rdkafka &&  \
     docker-php-ext-install \
         mysqli \
         mbstring \
@@ -53,7 +55,8 @@ RUN pecl channel-update pecl.php.net && \
         xsl && \
     docker-php-ext-configure gd --with-freetype=/usr/lib/ --with-jpeg=/usr/lib/ && \
     docker-php-ext-install gd && \
-    docker-php-ext-enable xdebug &&  \
+    docker-php-ext-enable xdebug && \
+    docker-php-ext-enable rdkafka && \
     rm -rf /tmp/pear && \
     rm /var/cache/apk/*
 
