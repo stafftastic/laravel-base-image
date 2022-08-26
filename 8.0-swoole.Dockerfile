@@ -5,6 +5,7 @@ FROM phpswoole/swoole:4.8.9-php8.0-alpine
 RUN apk --update add \
         gcompat \
         libstdc++ \
+        git \
         wget \
         curl \
         build-base \
@@ -48,7 +49,6 @@ RUN pecl channel-update pecl.php.net && \
         intl \
         gettext \
         soap \
-        git \
         sockets \
         xsl && \
     docker-php-ext-configure gd --with-freetype=/usr/lib/ --with-jpeg=/usr/lib/ && \
