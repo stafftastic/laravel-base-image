@@ -48,6 +48,7 @@ RUN pecl channel-update pecl.php.net && \
         intl \
         gettext \
         soap \
+        git \
         sockets \
         xsl && \
     docker-php-ext-configure gd --with-freetype=/usr/lib/ --with-jpeg=/usr/lib/ && \
