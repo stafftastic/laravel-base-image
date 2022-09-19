@@ -21,9 +21,8 @@ RUN apk --update --no-cache add \
     less
 
 RUN pecl install rdkafka && docker-php-ext-enable rdkafka
-RUN pecl install xdebug && \
-    docker-php-ext-enable xdebug &&  \
-    rm -rf /tmp/pear
+RUN pecl install xdebug && docker-php-ext-enable xdebug
+RUN rm -rf /tmp/pear
 
 WORKDIR /app
 USER 1000

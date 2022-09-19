@@ -2,7 +2,7 @@ FROM composer:2.2 AS composer
 
 FROM phpswoole/swoole:4.8.9-php8.0-alpine
 
-RUN apk --update add \
+RUN apk --update --no-cache add \
     gcompat \
     libstdc++ \
     git \
@@ -37,6 +37,7 @@ RUN pecl channel-update pecl.php.net && \
     pecl install mcrypt && \
     pecl install xdebug && \
     pecl install rdkafka &&  \
+    pecl install redis &&  \
     docker-php-ext-install \
         mysqli \
         mbstring \
@@ -57,6 +58,7 @@ RUN pecl channel-update pecl.php.net && \
     docker-php-ext-install gd && \
     docker-php-ext-enable xdebug && \
     docker-php-ext-enable rdkafka && \
+    docker-php-ext-enable redis && \
     rm -rf /tmp/pear && \
     rm /var/cache/apk/*
 
