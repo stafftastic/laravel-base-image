@@ -7,8 +7,9 @@ jobs:
   build-push:
     name: Build and Push Container Image
     runs-on: ubuntu-latest
+    continue-on-error: true
     strategy:
-      fail-fast: true
+      fail-fast: false
       matrix:
         images:
           - name: laravel-nginx
