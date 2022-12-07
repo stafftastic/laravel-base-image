@@ -12,9 +12,9 @@ jobs:
       matrix:
         images:
           - name: laravel-nginx
-            file: 8.0-nginx.Dockerfile
+            file: laravel-nginx.Dockerfile
           - name: laravel-swoole
-            file: 8.0-swoole.Dockerfile
+            file: laravel-swoole.Dockerfile
     steps:
     - name: Checkout
       uses: actions/checkout@v3
