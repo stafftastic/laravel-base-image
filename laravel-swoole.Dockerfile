@@ -1,6 +1,6 @@
-FROM composer:2.2 AS composer
+FROM composer:2.4.4 AS composer
 
-FROM phpswoole/swoole:4.8.9-php8.0-alpine
+FROM phpswoole/swoole:5.0-php8.1-alpine
 
 RUN apk --update --no-cache add \
     gcompat \
