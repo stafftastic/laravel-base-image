@@ -1,4 +1,4 @@
-FROM webdevops/php-nginx:8.1-alpine
+FROM webdevops/php-nginx:8.2-alpine
 
 ENV WEB_DOCUMENT_ROOT=/app/public
 ENV php.opcache.enable=1
@@ -21,7 +21,6 @@ RUN apk --update --no-cache add \
     less
 
 RUN pecl install rdkafka && docker-php-ext-enable rdkafka
-RUN pecl install xdebug && docker-php-ext-enable xdebug
 RUN rm -rf /tmp/pear
 
 WORKDIR /app
