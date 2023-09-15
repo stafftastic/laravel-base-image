@@ -15,7 +15,7 @@
       pkgs = pkgsFor.${system};
       init = pkgs.writeText "entrypoint.sh" ''
         #!${pkgs.bash}/bin/bash
-        mkdir -pm1777 /tmp
+        find /entrypoint.d -type f -executable -print0 | xargs -0I{} {}
         nginx -e /dev/null -c ${nginxConf} &
         php-fpm -Fy ${phpFpmConf} -c ${phpIni} &
         wait -n
@@ -125,6 +125,11 @@
             "/etc"
           ];
         };
+        runAsRoot = ''
+          #!/usr/bin/env bash
+          mkdir -pm1777 /tmp
+          mkdir -p /entrypoint.d
+        '';
         config = {
           Cmd = [ "${pkgs.bash}/bin/bash" init ];
           Env = [
