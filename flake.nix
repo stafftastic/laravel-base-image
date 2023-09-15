@@ -78,7 +78,7 @@
           include ${pkgs.nginx}/conf/mime.types;
           default_type application/octet-stream;
           upstream php {
-            server 127.0.0.0:9000;
+            server 127.0.0.1:9000;
           }
           server {
             listen 80;
