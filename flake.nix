@@ -23,10 +23,10 @@
       '';
       phpFpmConf = pkgs.writeText "php-fpm.conf" ''
         [global]
-        error_log = /dev/stdout
+        error_log = /dev/stderr
         log_limit = 8192
         [www]
-        access.log = /dev/stdout
+        access.log = /dev/stderr
         access.format = "[php-fpm:access] %R - %u %t \"%m %r%Q%q\" %s %f %{mili}d %{kilo}M %C%%"
         clear_env = no
         catch_workers_output = yes
@@ -42,8 +42,9 @@
         pm.max_spare_servers = 3
       '';
       phpIni = pkgs.writeText "php.ini" ''
-        display_errors = Off
+        display_errors = On
         log_errors = On
+        error_log = /dev/stderr
         short_open_tag = Off
         variables_order = 'GPCS'
         request_order = 'GP'
