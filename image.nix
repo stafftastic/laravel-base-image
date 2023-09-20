@@ -27,10 +27,6 @@
     ];
     pathsToLink = [ "/bin" ];
   };
-  extraDirs = runCommand "extra-dirs" {} ''
-    mkdir -pm1777 $out/tmp
-    mkdir -p $out/entrypoint.d
-  '';
 in dockerTools.buildImage {
   name = "laravel-base-image";
   tag = "local";
@@ -38,12 +34,16 @@ in dockerTools.buildImage {
     name = "laravel-base";
     paths = with dockerTools; [
       bin
-      extraDirs
       usrBinEnv
       caCertificates
       fakeNss
     ];
   };
+  runAsRoot = ''
+    #!${bash}/bin/bash
+    mkdir -pm1777 /tmp
+    mkdir -p /entrypoint.d
+  '';
   config = {
     Cmd = [ "${bash}/bin/bash" config.entrypointSh ];
     Env = [
