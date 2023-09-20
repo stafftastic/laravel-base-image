@@ -1,5 +1,6 @@
 { lib
 , pkgs
+, hiPrio
 , nginx
 , php82
 , busybox
@@ -20,7 +21,8 @@
   bin = buildEnv {
     name = "bin";
     paths = [
-      busybox
+      (hiPrio busybox)
+      bash
       nginx
       php
       php.packages.composer
