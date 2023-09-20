@@ -3,6 +3,7 @@
 , nginx
 , php82
 , busybox
+, bash
 , buildEnv
 , runCommand
 , dockerTools
@@ -44,7 +45,7 @@ in dockerTools.buildImage {
     ];
   };
   config = {
-    Cmd = [ "${busybox}/bin/sh" config.entrypointSh ];
+    Cmd = [ "${bash}/bin/bash" config.entrypointSh ];
     Env = [
       "PHPRC=${config.phpIni}"
     ];
