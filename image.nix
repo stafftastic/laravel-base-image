@@ -8,6 +8,10 @@
 , buildEnv
 , runCommand
 , dockerTools
+, imageName ? "laravel-base-image"
+, imageTag ? "local"
+, extraEnv ? []
+, extraPkgs ? []
 , extraPhpExtensions ? ({enabled, all}: enabled)
 }: let
   callPackage = lib.callPackageWith (pkgs // config);
@@ -26,12 +30,12 @@
       nginx
       php
       php.packages.composer
-    ];
+    ] ++ extraPkgs;
     pathsToLink = [ "/bin" ];
   };
 in dockerTools.buildImage {
-  name = "laravel-base-image";
-  tag = "local";
+  name = imageName;
+  tag = imageTag;
   copyToRoot = buildEnv {
     name = "laravel-base";
     paths = with dockerTools; [
@@ -51,6 +55,6 @@ in dockerTools.buildImage {
     WorkingDir = "/app";
     Env = [
       "PHPRC=${config.phpIni}"
-    ];
+    ] ++ extraEnv;
   };
 }
