@@ -44,10 +44,11 @@ in dockerTools.buildImage {
   runAsRoot = ''
     #!${bash}/bin/bash
     mkdir -pm1777 /tmp
-    mkdir -p /entrypoint.d /var/cache/nginx
+    mkdir -p /entrypoint.d /var/cache/nginx /app
   '';
   config = {
     Cmd = [ "${bash}/bin/bash" config.entrypointSh ];
+    WorkingDir = "/app";
     Env = [
       "PHPRC=${config.phpIni}"
     ];
