@@ -2,7 +2,7 @@
 , pkgs
 , hiPrio
 , nginx
-, php82
+, php
 , busybox
 , bash
 , buildEnv
@@ -21,15 +21,15 @@
     phpIni = callPackage ./config/php-ini.nix {};
     nginxConf = callPackage ./config/nginx-conf.nix {};
   };
-  php = php82.withExtensions extraPhpExtensions;
+  phpWithExtensions = php.withExtensions extraPhpExtensions;
   bin = buildEnv {
     name = "bin";
     paths = [
       (hiPrio busybox)
       bash
       nginx
-      php
-      php.packages.composer
+      phpWithExtensions
+      phpWithExtensions.packages.composer
     ] ++ extraPkgs;
     pathsToLink = [ "/bin" ];
   };
